@@ -1,5 +1,6 @@
 package com.beta.bookvault.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,11 +14,14 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String author;
-
     @Column(name = "published_year")
     private int year;
+
+    //fetch = FetchType.LAZY means don't load the author until I ask for it (Efficient)
+    @ManyToOne(fetch = FetchType.LAZY)  // Many books belong to one author
+    @JoinColumn(name = "author_id", nullable = false)   //Use this column for foreign key
+    @JsonIgnoreProperties("books")  //prevents infinite JSON recursion
+    private Author author;
 
     //Getters and Setters
 
@@ -37,19 +41,19 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public int getYear() {
         return year;
     }
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }
