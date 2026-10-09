@@ -3,6 +3,9 @@ package com.beta.bookvault.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -22,6 +25,13 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)   //Use this column for foreign key
     @JsonIgnoreProperties("books")  //prevents infinite JSON recursion
     private Author author;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "book_tags",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonIgnoreProperties("books")
+    private Set<Tag> tags = new HashSet<>();
 
     //Getters and Setters
 
@@ -55,5 +65,13 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }

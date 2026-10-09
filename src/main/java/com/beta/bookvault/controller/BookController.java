@@ -1,7 +1,9 @@
 package com.beta.bookvault.controller;
 
 import com.beta.bookvault.entity.Book;
+import com.beta.bookvault.service.AuthorService;
 import com.beta.bookvault.service.BookService;
+import com.beta.bookvault.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,12 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private TagService tagService;
 
     @GetMapping
     public List<Book> getAllBooks() {
