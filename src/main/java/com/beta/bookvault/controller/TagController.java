@@ -19,6 +19,11 @@ public class TagController {
         return tagService.getAllTags();
     }
 
+    @GetMapping("/{id}")
+    public Tag getAll(@PathVariable("id") Long id) {
+        return tagService.getTagById(id);
+    }
+
     @PostMapping
     public Tag create(@RequestBody Tag tag) {
         return tagService.saveTag(tag);

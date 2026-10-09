@@ -30,7 +30,7 @@ public class BookService {
     }
 
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return bookRepository.findAllWithTagsAndAuthor();
     }
 
     public Book saveBook(Book book) {
