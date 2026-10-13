@@ -1,7 +1,9 @@
 package com.beta.bookvault.service;
 
+import com.beta.bookvault.entity.Author;
 import com.beta.bookvault.entity.Book;
-import com.beta.bookvault.entity.Tag;
+import com.beta.bookvault.excecptions.InvalidRequestException;
+import com.beta.bookvault.excecptions.ResourceNotFoundException;
 import com.beta.bookvault.helper.BookVaultHelper;
 import com.beta.bookvault.repository.AuthorRepository;
 import com.beta.bookvault.repository.BookRepository;
@@ -34,13 +36,17 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
+        if(book.getTitle() == null || book.getTitle().isBlank()) {
+            throw new InvalidRequestException("Book title is required");
+        }
         helper.resolveAuthor(book);
         helper.resolveTags(book);
         return bookRepository.save(book);
     }
 
     public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+        return bookRepository.findById(id)
+                .orElseThrow(() ->  new ResourceNotFoundException("Book not found with id: " + id));
     }
 
     public void deleteBook(Long id) {
@@ -49,32 +55,20 @@ public class BookService {
 
     //Update an Existing book
     public Book updateBook(Long id, Book updated) {
-        Book existing = bookRepository.findById(id).orElse(null);
-        if(existing == null) return null;
+        Book existing = getBookById(id);    // Throw 404 if missing
 
-        existing.setTitle(updated.getTitle());
-        existing.setYear(updated.getYear());
+        if (updated.getTitle() != null) existing.setTitle(updated.getTitle());
+        if (updated.getYear() > 0)  existing.setYear(updated.getYear());
 
-        //Author
-        if(updated.getAuthor() !=null && updated.getAuthor().getId() != null)
-        {
-            authorRepository.findById(updated.getAuthor().getId()).ifPresent(existing::setAuthor);
+        if(updated.getAuthor() != null && updated.getAuthor().getId() != null) {
+            Author author = authorRepository.findById(updated.getAuthor().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + updated.getAuthor().getId()));
+            existing.setAuthor(author);
         }
 
-        //Tags
-        if (updated.getTags() != null) {
+        if(updated.getTags() != null){
             existing.getTags().clear();
-            for (Tag t : updated.getTags())
-            {
-                if (t.getId() != null) {
-                    tagRepository.findById(t.getId()).ifPresent(existing.getTags()::add);
-                }else if(t.getName() != null) {
-                    existing.getTags().add(
-                            tagRepository.findByName(t.getName())
-                                    .orElseGet(() -> tagRepository.save(t))
-                    );
-                }
-            }
+            existing.getTags().addAll(helper.resolveTagsFrom(updated.getTags()));
         }
         return bookRepository.save(existing);
     }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+//@RestControllerAdvice :  This is the global interceptor forall controllers. Return JSON
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -5,6 +5,8 @@ import com.beta.bookvault.service.AuthorService;
 import com.beta.bookvault.service.BookService;
 import com.beta.bookvault.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +35,9 @@ public class BookController {
     }
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookService.saveBook(book);
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        Book saved = bookService.saveBook(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved); // 201
     }
 
     @PutMapping("/{id}")
@@ -43,7 +46,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();  // 204
     }
 }

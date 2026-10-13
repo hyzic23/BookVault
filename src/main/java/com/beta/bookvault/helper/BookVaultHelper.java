@@ -40,4 +40,19 @@ public class BookVaultHelper {
         }
         book.setTags(resolved);
     }
+
+    public Set<Tag> resolveTagsFrom(Set<Tag> input) {
+        Set<Tag> resolved = new HashSet<>();
+        for (Tag t  : input){
+            if (t.getId() != null) {
+                tagRepository.findById(t.getId())
+                        .ifPresent(resolved::add);
+            } else if (t.getName() != null && !t.getName().isBlank()) {
+                Tag tag = tagRepository.findByName(t.getName())
+                        .orElseGet(() -> tagRepository.save(t));
+                resolved.add(tag);
+            }
+        }
+        return resolved;
+    }
 }
