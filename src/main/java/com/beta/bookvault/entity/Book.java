@@ -2,6 +2,9 @@ package com.beta.bookvault.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,12 +18,15 @@ public class Book {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Title is required")
     private String title;
 
+    @Min(value = 1450, message = "Year must be after 1450")
     @Column(name = "published_year")
     private int year;
 
     //fetch = FetchType.LAZY means don't load the author until I ask for it (Efficient)
+    @NotNull(message = "Author is required")
     @ManyToOne(fetch = FetchType.LAZY)  // Many books belong to one author
     @JoinColumn(name = "author_id", nullable = false)   //Use this column for foreign key
     @JsonIgnoreProperties("books")  //prevents infinite JSON recursion

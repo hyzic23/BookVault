@@ -4,6 +4,7 @@ import com.beta.bookvault.entity.Book;
 import com.beta.bookvault.service.AuthorService;
 import com.beta.bookvault.service.BookService;
 import com.beta.bookvault.service.TagService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
         Book saved = bookService.saveBook(book);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // 201
     }
