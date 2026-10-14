@@ -1,4 +1,4 @@
-package com.beta.bookvault.Dtos;
+package com.beta.bookvault.dtos;
 
 import java.time.LocalDateTime;
 

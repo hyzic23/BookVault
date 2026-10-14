@@ -1,6 +1,6 @@
-package com.beta.bookvault.Dtos;
+package com.beta.bookvault.dtos;
 
-public class TagSummary {
+public class AuthorSummary {
 
     private Long id;
     private String name;
