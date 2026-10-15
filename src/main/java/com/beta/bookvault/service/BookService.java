@@ -73,6 +73,7 @@ public class BookService {
     }
 
     //Update an Existing book
+    @Transactional
     public BookResponse updateBook(Long id, BookRequest request) {
         Book existing = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
