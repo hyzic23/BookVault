@@ -1,5 +1,7 @@
 package com.beta.bookvault.controller;
 
+import com.beta.bookvault.dtos.BookRequest;
+import com.beta.bookvault.dtos.BookResponse;
 import com.beta.bookvault.entity.Book;
 import com.beta.bookvault.service.AuthorService;
 import com.beta.bookvault.service.BookService;
@@ -26,23 +28,23 @@ public class BookController {
     private TagService tagService;
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookResponse> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable Long id) {
+    public BookResponse getBook(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
-        Book saved = bookService.saveBook(book);
+    public ResponseEntity<BookResponse> createBook(@Valid @RequestBody BookRequest book) {
+        BookResponse saved = bookService.saveBook(book);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // 201
     }
 
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable("id") Long id, @RequestBody Book book) {
+    public BookResponse updateBook(@PathVariable("id") Long id, @RequestBody BookRequest book) {
         return bookService.updateBook(id, book);
     }
 

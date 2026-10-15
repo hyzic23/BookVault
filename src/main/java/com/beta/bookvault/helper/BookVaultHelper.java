@@ -26,19 +26,25 @@ public class BookVaultHelper {
         }
     }
 
-    public void resolveTags(Book book) {
-        if (book.getTags() == null) return;
+    public Set<Tag> resolveTags(Set<Long> tagIds, Set<String> tagNames) {
         Set<Tag> resolved = new HashSet<>();
-        for (Tag t : book.getTags()){
-            if (t.getId() != null) {
-                tagRepository.findById(t.getId()).ifPresent(resolved::add);
-            }else if (t.getName() != null) {
-                Tag tag = tagRepository.findByName(t.getName())
-                        .orElseGet(() -> tagRepository.save(t));
+        if (tagIds != null) {
+            for (Long tid : tagIds) {
+                tagRepository.findById(tid).ifPresent(resolved::add);
+            }
+        }
+        if (tagNames != null) {
+            for (String name : tagNames) {
+                Tag tag = tagRepository.findByName(name)
+                        .orElseGet(() -> {
+                            Tag t = new Tag();
+                            t.setName(name);
+                            return tagRepository.save(t);
+                        });
                 resolved.add(tag);
             }
         }
-        book.setTags(resolved);
+        return resolved;
     }
 
     public Set<Tag> resolveTagsFrom(Set<Tag> input) {
