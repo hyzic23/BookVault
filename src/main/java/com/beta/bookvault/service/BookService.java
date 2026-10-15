@@ -4,7 +4,6 @@ import com.beta.bookvault.dtos.BookRequest;
 import com.beta.bookvault.dtos.BookResponse;
 import com.beta.bookvault.entity.Author;
 import com.beta.bookvault.entity.Book;
-import com.beta.bookvault.excecptions.InvalidRequestException;
 import com.beta.bookvault.excecptions.ResourceNotFoundException;
 import com.beta.bookvault.helper.BookVaultHelper;
 import com.beta.bookvault.mapper.BookMapper;
@@ -12,6 +11,8 @@ import com.beta.bookvault.repository.AuthorRepository;
 import com.beta.bookvault.repository.BookRepository;
 import com.beta.bookvault.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +41,9 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookResponse> getAllBooks() {
-        return bookRepository.findAllWithTagsAndAuthor()
-                .stream()
-                .map(bookMapper::toResponse)
-                .toList();
+    public Page<BookResponse> getAllBooks(Pageable pageable) {
+        return bookRepository.findAllWithDetails(pageable)
+                .map(bookMapper::toResponse);
     }
 
     @Transactional

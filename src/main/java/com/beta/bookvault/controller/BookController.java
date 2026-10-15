@@ -8,6 +8,9 @@ import com.beta.bookvault.service.BookService;
 import com.beta.bookvault.service.TagService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +31,9 @@ public class BookController {
     private TagService tagService;
 
     @GetMapping
-    public List<BookResponse> getAllBooks() {
-        return bookService.getAllBooks();
+    public Page<BookResponse> getAllBooks(
+            @PageableDefault(size = 10, sort = "title") Pageable pageable) {
+        return bookService.getAllBooks(pageable);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.beta.bookvault.repository;
 
 import com.beta.bookvault.entity.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +28,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "LEFT JOIN FETCH b.tags " +
             "WHERE b.id = :id")
     Optional<Book> findByIdWithDetails(@Param("id") Long id);
+
+    @Query("SELECT b.id FROM Book b")
+    Page<Long> findAllIds(Pageable pageable);
+
+    @Query("SELECT DISTINCT b FROM Book b " +
+            "LEFT JOIN FETCH b.author " +
+            "LEFT JOIN FETCH b.tags " +
+            "WHERE b.id IN :ids")
+    List<Book> findAllByIdsWithDetails(@Param("ids") List<Long> ids);
+
+    @Query("SELECT DISTINCT b FROM Book b " +
+            "LEFT JOIN FETCH b.author " +
+            "LEFT JOIN FETCH b.tags ")
+    Page<Book> findAllWithDetails(Pageable pageable);
 }
