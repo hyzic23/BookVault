@@ -2,6 +2,7 @@ package com.beta.bookvault.service;
 
 import com.beta.bookvault.dtos.BookRequest;
 import com.beta.bookvault.dtos.BookResponse;
+import com.beta.bookvault.dtos.PageResponse;
 import com.beta.bookvault.entity.Author;
 import com.beta.bookvault.entity.Book;
 import com.beta.bookvault.excecptions.ResourceNotFoundException;
@@ -41,9 +42,27 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public Page<BookResponse> getAllBooks(Pageable pageable) {
-        return bookRepository.findAllWithDetails(pageable)
+    public PageResponse<BookResponse> getAllBooks(Pageable pageable) {
+
+//        Page<BookResponse> bookPage =  bookRepository.findAllWithDetails(pageable)
+//                .map(bookMapper::toResponse);
+//        return PageResponse.from(bookPage);
+
+//        List<BookResponse> books = bookPage.getContent().stream()
+//                .map(bookMapper::toResponse).toList();
+
+        Page<BookResponse> bookPage = bookRepository
+                .findAllWithDetails(pageable)
                 .map(bookMapper::toResponse);
+
+        return new PageResponse<>(
+                bookPage.getContent(),
+                bookPage.getNumber(),
+                bookPage.getSize(),
+                bookPage.getTotalElements(),
+                bookPage.getTotalPages(),
+                bookPage.isLast()
+        );
     }
 
     @Transactional

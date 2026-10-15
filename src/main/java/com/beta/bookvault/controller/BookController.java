@@ -2,6 +2,7 @@ package com.beta.bookvault.controller;
 
 import com.beta.bookvault.dtos.BookRequest;
 import com.beta.bookvault.dtos.BookResponse;
+import com.beta.bookvault.dtos.PageResponse;
 import com.beta.bookvault.entity.Book;
 import com.beta.bookvault.service.AuthorService;
 import com.beta.bookvault.service.BookService;
@@ -31,7 +32,7 @@ public class BookController {
     private TagService tagService;
 
     @GetMapping
-    public Page<BookResponse> getAllBooks(
+    public PageResponse<BookResponse> getAllBooks(
             @PageableDefault(size = 10, sort = "title") Pageable pageable) {
         return bookService.getAllBooks(pageable);
     }
