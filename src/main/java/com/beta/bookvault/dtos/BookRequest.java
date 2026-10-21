@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
+/*
+Model for Book Request
+ */
 public class BookRequest {
 
     @NotBlank(message = "Title is required")

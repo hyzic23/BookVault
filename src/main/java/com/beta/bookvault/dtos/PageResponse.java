@@ -2,6 +2,9 @@ package com.beta.bookvault.dtos;
 
 import java.util.List;
 
+/*
+Model for Pagination Response
+ */
 public class PageResponse<T> {
 
     private List<T> content;

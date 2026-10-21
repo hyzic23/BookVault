@@ -2,6 +2,9 @@ package com.beta.bookvault.dtos;
 
 import java.util.Set;
 
+/*
+Model for Book Response
+ */
 public class BookResponse {
 
     private Long id;

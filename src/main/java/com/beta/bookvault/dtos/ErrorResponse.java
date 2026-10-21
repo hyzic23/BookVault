@@ -2,6 +2,9 @@ package com.beta.bookvault.dtos;
 
 import java.time.LocalDateTime;
 
+/*
+Model for Error Response
+ */
 public class ErrorResponse {
 
     private LocalDateTime timestamp;

@@ -1,5 +1,8 @@
 package com.beta.bookvault.dtos;
 
+/*
+Model for Author Summary
+ */
 public class AuthorSummary {
 
     private Long id;

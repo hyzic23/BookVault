@@ -1,5 +1,8 @@
 package com.beta.bookvault.dtos;
 
+/*
+Model for Tag Summary
+ */
 public class TagSummary {
 
     private Long id;
