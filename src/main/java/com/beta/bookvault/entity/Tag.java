@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+Model for Tags
+ */
 @Entity
 @Table(name = "tags")
 public class Tag {

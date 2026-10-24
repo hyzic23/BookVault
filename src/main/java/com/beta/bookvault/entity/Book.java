@@ -9,6 +9,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+Model for Book
+ */
 @Entity
 @Table(name = "books")
 public class Book {
